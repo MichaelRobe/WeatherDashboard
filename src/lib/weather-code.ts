@@ -1,0 +1,158 @@
+type WeatherCodePeriod = "day" | "night"
+
+export type WeatherCodeInfo = {
+  description: string
+  iconUrl: string
+}
+
+type WeatherCodeEntry = {
+  day: { description: string; icon: string }
+  night: { description: string; icon: string }
+}
+
+const weatherCodeMap: Record<number, WeatherCodeEntry> = {
+  0: {
+    day: { description: "Sunny", icon: "01d" },
+    night: { description: "Clear", icon: "01n" },
+  },
+  1: {
+    day: { description: "Mainly Sunny", icon: "01d" },
+    night: { description: "Mainly Clear", icon: "01n" },
+  },
+  2: {
+    day: { description: "Partly Cloudy", icon: "02d" },
+    night: { description: "Partly Cloudy", icon: "02n" },
+  },
+  3: {
+    day: { description: "Cloudy", icon: "03d" },
+    night: { description: "Cloudy", icon: "03n" },
+  },
+  45: {
+    day: { description: "Foggy", icon: "50d" },
+    night: { description: "Foggy", icon: "50n" },
+  },
+  48: {
+    day: { description: "Rime Fog", icon: "50d" },
+    night: { description: "Rime Fog", icon: "50n" },
+  },
+  51: {
+    day: { description: "Light Drizzle", icon: "09d" },
+    night: { description: "Light Drizzle", icon: "09n" },
+  },
+  53: {
+    day: { description: "Drizzle", icon: "09d" },
+    night: { description: "Drizzle", icon: "09n" },
+  },
+  55: {
+    day: { description: "Heavy Drizzle", icon: "09d" },
+    night: { description: "Heavy Drizzle", icon: "09n" },
+  },
+  56: {
+    day: { description: "Light Freezing Drizzle", icon: "09d" },
+    night: { description: "Light Freezing Drizzle", icon: "09n" },
+  },
+  57: {
+    day: { description: "Freezing Drizzle", icon: "09d" },
+    night: { description: "Freezing Drizzle", icon: "09n" },
+  },
+  61: {
+    day: { description: "Light Rain", icon: "10d" },
+    night: { description: "Light Rain", icon: "10n" },
+  },
+  63: {
+    day: { description: "Rain", icon: "10d" },
+    night: { description: "Rain", icon: "10n" },
+  },
+  65: {
+    day: { description: "Heavy Rain", icon: "10d" },
+    night: { description: "Heavy Rain", icon: "10n" },
+  },
+  66: {
+    day: { description: "Light Freezing Rain", icon: "10d" },
+    night: { description: "Light Freezing Rain", icon: "10n" },
+  },
+  67: {
+    day: { description: "Freezing Rain", icon: "10d" },
+    night: { description: "Freezing Rain", icon: "10n" },
+  },
+  71: {
+    day: { description: "Light Snow", icon: "13d" },
+    night: { description: "Light Snow", icon: "13n" },
+  },
+  73: {
+    day: { description: "Snow", icon: "13d" },
+    night: { description: "Snow", icon: "13n" },
+  },
+  75: {
+    day: { description: "Heavy Snow", icon: "13d" },
+    night: { description: "Heavy Snow", icon: "13n" },
+  },
+  77: {
+    day: { description: "Snow Grains", icon: "13d" },
+    night: { description: "Snow Grains", icon: "13n" },
+  },
+  80: {
+    day: { description: "Light Showers", icon: "09d" },
+    night: { description: "Light Showers", icon: "09n" },
+  },
+  81: {
+    day: { description: "Showers", icon: "09d" },
+    night: { description: "Showers", icon: "09n" },
+  },
+  82: {
+    day: { description: "Heavy Showers", icon: "09d" },
+    night: { description: "Heavy Showers", icon: "09n" },
+  },
+  85: {
+    day: { description: "Light Snow Showers", icon: "13d" },
+    night: { description: "Light Snow Showers", icon: "13n" },
+  },
+  86: {
+    day: { description: "Snow Showers", icon: "13d" },
+    night: { description: "Snow Showers", icon: "13n" },
+  },
+  95: {
+    day: { description: "Thunderstorm", icon: "11d" },
+    night: { description: "Thunderstorm", icon: "11n" },
+  },
+  96: {
+    day: { description: "Light Thunderstorms With Hail", icon: "11d" },
+    night: { description: "Light Thunderstorms With Hail", icon: "11n" },
+  },
+  99: {
+    day: { description: "Thunderstorm With Hail", icon: "11d" },
+    night: { description: "Thunderstorm With Hail", icon: "11n" },
+  },
+}
+
+const fallbackWeather: WeatherCodeInfo = {
+  description: "Unknown weather",
+  iconUrl: "https://openweathermap.org/img/wn/03d@2x.png",
+}
+
+function getPeriod(isDay: boolean | null | undefined): WeatherCodePeriod {
+  return isDay ? "day" : "night"
+}
+
+export function getWeatherCodeInfo(
+  weatherCode: number | null | undefined,
+  isDay: boolean | null | undefined
+): WeatherCodeInfo {
+  if (weatherCode === null || weatherCode === undefined) {
+    return fallbackWeather
+  }
+
+  const entry = weatherCodeMap[weatherCode]
+
+  if (!entry) {
+    return fallbackWeather
+  }
+
+  const period = getPeriod(isDay)
+  const selection = entry[period]
+
+  return {
+    description: selection.description,
+    iconUrl: `https://openweathermap.org/img/wn/${selection.icon}@2x.png`,
+  }
+}

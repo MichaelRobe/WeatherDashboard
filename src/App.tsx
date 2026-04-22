@@ -1,20 +1,50 @@
-import { Button } from "@/components/ui/button"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+
+import { AppSidebar } from "@/components/sidebar"
+import { Header } from "@/components/header"
+import { LocationCard } from "@/components/cards/location"
+import { CurrentWeatherCard } from "@/components/cards/weather"
+import type { DashboardCardSize } from "@/components/cards/base/config"
+
+import type { ComponentType, CSSProperties } from "react"
+
+
+
+type DashboardCardItem = {
+  id: string
+  size: DashboardCardSize
+  component: ComponentType<{ size: DashboardCardSize }>
+}
+
+const cards: DashboardCardItem[] = [
+  { id: "location", size: "tall", component: LocationCard },
+  { id: "current", size: "sm", component: CurrentWeatherCard },
+  { id: "location-two", size: "sm", component: LocationCard },
+  { id: "current-two", size: "wide", component: CurrentWeatherCard },
+]
 
 export function App() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "20rem",
+          "--sidebar-width-mobile": "20rem",
+        } as CSSProperties
+      }
+    >
+      <AppSidebar />
+      <SidebarInset>
+        <Header />
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <div className="grid auto-rows-[minmax(14rem,auto)] gap-4 md:grid-cols-3">
+            {cards.map(({ id, component: CardComponent, size }) => (
+              <CardComponent key={id} size={size} />
+            ))}
+          </div>
         </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
 

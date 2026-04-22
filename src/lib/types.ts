@@ -1,37 +1,48 @@
-export interface FetchGeocoding {
+export type GeocodingResult = {
   id: number;
   name: string;
   latitude: number;
   longitude: number;
-  elevation: number;
-  feature_code: string;
-  country_code: string;
-  admin1_id: number;
-  admin2_id: number;
   timezone: string;
-  population: number;
-  country_id: number;
   country: string;
-  admin1: string;
-  admin2: string;
+  country_code: string;
+  admin1?: string;
+};
+
+export type GeocodingResponse = {
+  results?: GeocodingResult[];
+};
+
+export type CurrentWeatherResponse = {
+  timezone: string
+  current_units: {
+    time: string
+    interval: string
+    temperature_2m: string
+    apparent_temperature: string
+    weather_code: string
+    is_day: string
+    rain: string
+    wind_speed_10m: string
+  }
+  current: {
+    time: string
+    interval: number
+    temperature_2m: number
+    apparent_temperature: number
+    weather_code: number
+    is_day: number
+    rain: number
+    wind_speed_10m: number
+  }
 }
 
-export interface ApiResponseGeocoding {
-  results: FetchGeocoding[];
-  generationtime_ms: number;
-}
-
-export type Geocoding = {
+export type Location = {
   name: string;
   latitude: number;
   longitude: number;
-  timeZone: string;
-  state: string;
+  timezone: string;
   country: string;
-};
-
-export type Location = {
-  cityName: string;
+  countryCode: string;
   state?: string;
-  country: string;
 };
