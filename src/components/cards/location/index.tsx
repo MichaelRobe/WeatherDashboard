@@ -11,8 +11,6 @@ export function LocationCard({ size = "sm" }: LocationCardProps) {
 
   return (
     <BaseCard
-      title="Selected Location"
-      description="Geocoding result from your latest search"
       size={size}
       empty={!location}
     >

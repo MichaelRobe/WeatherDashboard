@@ -3,25 +3,35 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
 import { LocationCard } from "@/components/cards/location"
-import { CurrentWeatherCard } from "@/components/cards/weather"
-import type { DashboardCardSize } from "@/components/cards/base/config"
+import { CurrentWeatherCard } from "@/components/cards/weather/current"
+import { WeatherChartCard } from "@/components/cards/weather/chart"
+import { WeatherMapCard } from "@/components/cards/weather/map"
+import { DailyWeatherCard } from "@/components/cards/weather/daily"
 
-import type { ComponentType, CSSProperties } from "react"
+import type { CSSProperties } from "react"
 
-
-
-type DashboardCardItem = {
-  id: string
-  size: DashboardCardSize
-  component: ComponentType<{ size: DashboardCardSize }>
+const CHART_METRICS = {
+  temperature: {
+    key: "temperature_2m",
+    label: "Temperature",
+    color: "var(--chart-1)",
+  },
+  apparentTemperature: {
+    key: "apparent_temperature",
+    label: "Apparent Temperature",
+    color: "var(--chart-2)",
+  },
+  rain: {
+    key: "precipitation",
+    label: "Rain",
+    color: "var(--chart-3)",
+  },
+  windSpeed: {
+    key: "wind_speed_10m",
+    label: "Wind Speed",
+    color: "var(--chart-4)",
+  },
 }
-
-const cards: DashboardCardItem[] = [
-  { id: "location", size: "tall", component: LocationCard },
-  { id: "current", size: "sm", component: CurrentWeatherCard },
-  { id: "location-two", size: "sm", component: LocationCard },
-  { id: "current-two", size: "wide", component: CurrentWeatherCard },
-]
 
 export function App() {
   return (
@@ -38,9 +48,14 @@ export function App() {
         <Header />
         <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="grid auto-rows-[minmax(14rem,auto)] gap-4 md:grid-cols-3">
-            {cards.map(({ id, component: CardComponent, size }) => (
-              <CardComponent key={id} size={size} />
-            ))}
+            <CurrentWeatherCard size="md" />
+            <WeatherMapCard size="lg" layer="precipitation_new" />
+            
+            <DailyWeatherCard size="md" days={7} />
+            <WeatherChartCard size="md" metric={CHART_METRICS.temperature} />
+            <WeatherChartCard size="md" metric={CHART_METRICS.apparentTemperature} />
+            <WeatherChartCard size="md" metric={CHART_METRICS.rain} />
+            <WeatherChartCard size="md" metric={CHART_METRICS.windSpeed} />
           </div>
         </div>
       </SidebarInset>

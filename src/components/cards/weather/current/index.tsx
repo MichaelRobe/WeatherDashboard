@@ -1,7 +1,7 @@
 import { BaseCard } from "@/components/cards/base"
 import type { DashboardCardSize } from "@/components/cards/base/config"
 import { useLocationContext } from "@/hooks/use-location"
-import { useCurrentWeather } from "@/api/open-mateo"
+import { useWeatherForecast } from "@/api/open-mateo"
 import { getWeatherCodeInfo } from "@/lib/weather-code"
 import { Badge } from "@/components/ui/badge"
 import { IconMapPin } from "@tabler/icons-react"
@@ -13,9 +13,22 @@ type CurrentWeatherCardProps = {
 
 export function CurrentWeatherCard({ size = "md" }: CurrentWeatherCardProps) {
   const { location } = useLocationContext()
-  const { weatherData, isLoading } = useCurrentWeather(
+
+  const weatherOptions = {
+    current: [
+      "temperature_2m",
+      "apparent_temperature",
+      "weather_code",
+      "is_day",
+      "rain",
+      "wind_speed_10m",
+    ]
+  }
+
+  const { weatherData, isLoading } = useWeatherForecast(
     location?.latitude ?? null,
-    location?.longitude ?? null
+    location?.longitude ?? null,
+    weatherOptions
   )
 
   const weatherCodeInfo = getWeatherCodeInfo(

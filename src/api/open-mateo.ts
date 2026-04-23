@@ -1,5 +1,11 @@
 import useSWR from 'swr';
-import type { CurrentWeatherResponse, GeocodingResponse } from "@/lib/types.ts";
+import type {
+  GeocodingResponse,
+  ForecastResponse,
+  ForecastRequestOptions,
+  DailyWeatherResponse,
+  DailyWeatherItem
+} from "@/lib/types";
 
 
 const fetcher = async (url: string) => {
@@ -11,6 +17,50 @@ const fetcher = async (url: string) => {
 };
 
 const OPEN_METEO_BASE_URL = import.meta.env.VITE_OPEN_METEO_BASE_URL || 'https://api.open-meteo.com/v1';
+
+const normalizeDailyWeatherData = (daily?: DailyWeatherResponse): DailyWeatherItem[] => {
+  if (!daily?.time?.length) return [];
+
+  return daily.time.map((time, index) => ({
+    time: new Date(time),
+    weather_code: daily?.weather_code?.[index] ?? null,
+    temperature_2m_max: daily?.temperature_2m_max?.[index] ?? null,
+    temperature_2m_min: daily?.temperature_2m_min?.[index] ?? null,
+    precipitation_sum: daily?.precipitation_sum?.[index] ?? null,
+    precipitation_probability_max: daily?.precipitation_probability_max?.[index] ?? null,
+    wind_speed_10m_max: daily?.wind_speed_10m_max?.[index] ?? null,
+    sunrise: daily?.sunrise?.[index] ?? null,
+    sunset: daily?.sunset?.[index] ?? null,
+  }));
+}
+
+export function buildForecastUrl(
+  latitude: number,
+  longitude: number,
+  {
+    current,
+    hourly,
+    daily,
+    timezone = "auto",
+    forecastDays,
+    pastDays
+  }: ForecastRequestOptions = {}
+) {
+
+  const searchParams = new URLSearchParams({
+    latitude: String(latitude),
+    longitude: String(longitude),
+    timezone
+  });
+
+  if (current?.length) searchParams.set("current", current.join(","));
+  if (hourly?.length) searchParams.set("hourly", hourly.join(","));
+  if (daily?.length) searchParams.set("daily", daily.join(","));
+  if (forecastDays !== undefined) searchParams.set("forecast_days", String(forecastDays));
+  if (pastDays !== undefined) searchParams.set("past_days", String(pastDays));
+
+  return `${OPEN_METEO_BASE_URL}/forecast?${searchParams.toString()}`;
+}
 
 export function useGeocoding(location: string | null) {
   const url = location
@@ -26,16 +76,21 @@ export function useGeocoding(location: string | null) {
   };
 }
 
-export function useCurrentWeather(latitude: number | null, longitude: number | null) {
-
+export function useWeatherForecast(
+  latitude: number | null,
+  longitude: number | null,
+  options: ForecastRequestOptions = {}
+) {
   const url = (latitude !== null && longitude !== null)
-    ? `${OPEN_METEO_BASE_URL}/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code,is_day,rain,wind_speed_10m&timezone=auto`
+    ? buildForecastUrl(latitude, longitude, options)
     : null;
 
-  const { data, error, isLoading } = useSWR<CurrentWeatherResponse>(url, fetcher);
+  const { data, error, isLoading } = useSWR<ForecastResponse>(url, fetcher);
+  const normalizedDailyWeatherData = normalizeDailyWeatherData(data?.daily);
 
   return {
     weatherData: data,
+    dailyWeatherData: normalizedDailyWeatherData,
     isLoading,
     isError: !!error
   };
