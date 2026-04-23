@@ -3,14 +3,8 @@ import type { DashboardCardSize } from "@/components/cards/base/config"
 import { useLocationContext } from "@/hooks/use-location"
 import { useWeatherForecast } from "@/api/open-mateo"
 import { getWeatherCodeInfo } from "@/lib/weather-code"
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  IconCloudRain,
-  IconDroplets,
-  IconTemperature,
-  IconWind,
-} from "@tabler/icons-react"
-import { nextDay } from "date-fns"
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import dayjs from "dayjs"
 
 type DailyWeatherCardProps = {
@@ -45,24 +39,26 @@ export function DailyWeatherCard({ size = "md", days = 7 }: DailyWeatherCardProp
         <CardTitle>{days}-Day Forecast</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-4 mb-4">
-          {dailyWeatherData?.map((day, index) => {
-            const weatherInfo = getWeatherCodeInfo(day.weather_code, true)
+        <Carousel orientation="horizontal" >
+          <CarouselContent className="gap-4" >
+            {dailyWeatherData?.map((day, index) => {
+              const weatherInfo = getWeatherCodeInfo(day.weather_code, true)
 
-            return (
-              <div className="flex flex-col items-center" key={index}>
-                <span className="text-xs font-medium">{dayjs(day.time).format("ddd D")}</span>
-                <span className="mb-auto text-xs text-muted-foreground text-center">{weatherInfo.description}</span>
-                <img
-                  src={weatherInfo?.iconUrl}
-                  alt={weatherInfo?.description}
-                />
-                <span className="text-sm">{day.temperature_2m_max}</span>
-                <span className="text-xs text-muted-foreground">{day.temperature_2m_min}</span>
-              </div>
-            )
-          })}
-        </div>
+              return (
+                <CarouselItem className="md:basis-1/7 lg:basis-1/7 flex flex-col items-center" key={index}>
+                  <span className="text-xs font-medium">{dayjs(day.time).format("ddd D")}</span>
+                  <span className="mb-auto text-xs text-muted-foreground text-center">{weatherInfo.description}</span>
+                  <img
+                    src={weatherInfo?.iconUrl}
+                    alt={weatherInfo?.description}
+                  />
+                  <span className="text-sm">{day.temperature_2m_max}</span>
+                  <span className="text-xs text-muted-foreground">{day.temperature_2m_min}</span>
+                </CarouselItem>
+              )
+            })}
+          </CarouselContent>
+        </Carousel>
       </CardContent>
     </BaseCard>
   )

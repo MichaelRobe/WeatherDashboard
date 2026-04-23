@@ -2,11 +2,11 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 
 import { AppSidebar } from "@/components/sidebar"
 import { Header } from "@/components/header"
-import { LocationCard } from "@/components/cards/location"
 import { CurrentWeatherCard } from "@/components/cards/weather/current"
 import { WeatherChartCard } from "@/components/cards/weather/chart"
 import { WeatherMapCard } from "@/components/cards/weather/map"
 import { DailyWeatherCard } from "@/components/cards/weather/daily"
+import { HourlyWeatherCard } from "@/components/cards/weather/hourly"
 
 import type { CSSProperties } from "react"
 
@@ -50,8 +50,8 @@ export function App() {
           <div className="grid auto-rows-[minmax(14rem,auto)] gap-4 md:grid-cols-3">
             <CurrentWeatherCard size="md" />
             <WeatherMapCard size="lg" layer="precipitation_new" />
-            
             <DailyWeatherCard size="md" days={7} />
+            <HourlyWeatherCard size="md" hours={24} />
             <WeatherChartCard size="md" metric={CHART_METRICS.temperature} />
             <WeatherChartCard size="md" metric={CHART_METRICS.apparentTemperature} />
             <WeatherChartCard size="md" metric={CHART_METRICS.rain} />

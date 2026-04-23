@@ -4,7 +4,9 @@ import type {
   ForecastResponse,
   ForecastRequestOptions,
   DailyWeatherResponse,
-  DailyWeatherItem
+  DailyWeatherItem,
+  HourlyWeatherResponse,
+  HourlyWeatherItem
 } from "@/lib/types";
 
 
@@ -31,6 +33,21 @@ const normalizeDailyWeatherData = (daily?: DailyWeatherResponse): DailyWeatherIt
     wind_speed_10m_max: daily?.wind_speed_10m_max?.[index] ?? null,
     sunrise: daily?.sunrise?.[index] ?? null,
     sunset: daily?.sunset?.[index] ?? null,
+  }));
+}
+
+const normalizeHourlyWeatherData = (hourly?: HourlyWeatherResponse): HourlyWeatherItem[] => {
+  if (!hourly?.time?.length) return [];
+
+  return hourly.time.map((time, index) => ({
+    time: new Date(time),
+    weather_code: hourly?.weather_code?.[index] ?? null,
+    temperature_2m: hourly?.temperature_2m?.[index] ?? null,
+    apparent_temperature: hourly?.apparent_temperature?.[index] ?? null,
+    relative_humidity_2m: hourly?.relative_humidity_2m?.[index] ?? null,
+    precipitation_probability: hourly?.precipitation_probability?.[index] ?? null,
+    precipitation: hourly?.precipitation?.[index] ?? null,
+    wind_speed_10m: hourly?.wind_speed_10m?.[index] ?? null,
   }));
 }
 
@@ -87,10 +104,12 @@ export function useWeatherForecast(
 
   const { data, error, isLoading } = useSWR<ForecastResponse>(url, fetcher);
   const normalizedDailyWeatherData = normalizeDailyWeatherData(data?.daily);
+  const normalizedHourlyWeatherData = normalizeHourlyWeatherData(data?.hourly);
 
   return {
     weatherData: data,
     dailyWeatherData: normalizedDailyWeatherData,
+    hourlyWeatherData: normalizedHourlyWeatherData,
     isLoading,
     isError: !!error
   };

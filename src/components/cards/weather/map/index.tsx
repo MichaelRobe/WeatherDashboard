@@ -6,8 +6,6 @@ import { BaseCard } from "@/components/cards/base"
 import type { DashboardCardSize } from "@/components/cards/base/config"
 import { useLocationContext } from "@/hooks/use-location"
 
-import { CardContent, CardHeader } from "@/components/ui/card"
-
 type WeatherMapCardProps = {
   size?: DashboardCardSize
   layer?: "clouds_new" | "precipitation_new" | "pressure_new" | "wind_new" | "temp_new"
@@ -23,7 +21,7 @@ function SyncMapView({ position }: { position: LatLngTuple }) {
   return null
 }
 
-export function WeatherMapCard({ size = "lg", layer = "temp_new" }: WeatherMapCardProps) {
+export function WeatherMapCard({ size = "lg" }: WeatherMapCardProps) {
   const { location } = useLocationContext()
   const position: LatLngTuple = location
     ? [location.latitude, location.longitude]
