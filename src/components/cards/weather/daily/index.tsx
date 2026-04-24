@@ -39,7 +39,10 @@ export function DailyWeatherCard({ size = "md", days = 7 }: DailyWeatherCardProp
         <CardTitle>{days}-Day Forecast</CardTitle>
       </CardHeader>
       <CardContent>
-        <Carousel orientation="horizontal" >
+        <Carousel 
+          orientation="horizontal" 
+          opts={{ dragFree: true }}
+        >
           <CarouselContent className="gap-4" >
             {dailyWeatherData?.map((day, index) => {
               const weatherInfo = getWeatherCodeInfo(day.weather_code, true)

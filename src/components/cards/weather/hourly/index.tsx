@@ -37,14 +37,16 @@ export function HourlyWeatherCard({ size = "md", hours = 24 }: HourlyWeatherCard
                 <CardTitle>{hours}-Hour Forecast</CardTitle>
             </CardHeader>
             <CardContent>
-                <Carousel orientation="horizontal" >
+                <Carousel 
+                orientation="horizontal" 
+                opts={{ dragFree: true }}>
                     <CarouselContent className="gap-4" >
                         {hourlyWeatherData?.map((hour, index) => {
                             const weatherInfo = getWeatherCodeInfo(hour.weather_code, true)
 
                             return (
                                 <CarouselItem className="md:basis-1/7 lg:basis-1/7 flex flex-col items-center" key={index}>
-                                    <span className="text-xs font-medium">{dayjs(hour.time).format("hh")}</span>
+                                    <span className="text-xs font-medium">{dayjs(hour.time).format("h A")}</span>
                                     <span className="mb-auto text-xs text-muted-foreground text-center">{weatherInfo.description}</span>
                                     <img
                                         src={weatherInfo?.iconUrl}

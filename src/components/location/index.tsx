@@ -61,7 +61,7 @@ export function Location() {
         <ButtonGroup>
           <Combobox
             items={suggestions}
-            value={null}
+            value={inputValue}
             onInputValueChange={setInputValue}
             onValueChange={(value) => {
               if (!value) {

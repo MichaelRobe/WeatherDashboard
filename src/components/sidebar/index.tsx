@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/sidebar"
 
 import { Location } from "@/components/location"
-
-import { IconLayoutDashboard, IconChartBar} from "@tabler/icons-react"
+import { DASHBOARD_VIEWS } from "@/config/dashboard-views"
+import { NavLink, useLocation } from "react-router-dom"
 
 export function AppSidebar() {
+  const { pathname } = useLocation()
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -27,18 +28,21 @@ export function AppSidebar() {
         <SidebarSeparator />
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <IconLayoutDashboard />
-                Dashboard
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <IconChartBar />
-                Forecast
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {DASHBOARD_VIEWS.map((view) => {
+              const Icon = view.icon
+              const isActive = pathname === view.path
+
+              return (
+                <SidebarMenuItem key={view.id}>
+                  <SidebarMenuButton asChild isActive={isActive} tooltip={view.label}>
+                    <NavLink to={view.path}>
+                      <Icon />
+                      {view.label}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )
+            })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
