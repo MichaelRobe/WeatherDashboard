@@ -1,7 +1,7 @@
 import { BaseCard } from "@/components/cards/base"
 import type { DashboardCardSize } from "@/components/cards/base/config"
 import { useLocationContext } from "@/hooks/use-location"
-import { useWeatherForecast } from "@/api/open-mateo"
+import { useWeatherForecast } from "@/api/open-meteo"
 import { getWeatherCodeInfo } from "@/lib/weather-code"
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"

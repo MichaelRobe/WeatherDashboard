@@ -11,7 +11,7 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox"
 
-import { useGeocoding } from "@/api/open-mateo"
+import { useGeocoding } from "@/api/open-meteo"
 import { useCitySuggestions } from "@/hooks/use-city-suggestions"
 import { useLocationContext } from "@/hooks/use-location"
 import { useEffect, useState } from "react"

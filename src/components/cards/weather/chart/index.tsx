@@ -1,7 +1,7 @@
 import { useLocationContext } from "@/hooks/use-location"
 import BaseCard from "@/components/cards/base"
 import { CardContent, CardHeader } from "@/components/ui/card"
-import { useWeatherForecast } from "@/api/open-mateo"
+import { useWeatherForecast } from "@/api/open-meteo"
 import {
     ChartContainer,
     ChartTooltip,
