@@ -1,10 +1,11 @@
 import { useEffect } from "react"
 import { MapContainer, Marker, Popup, TileLayer, useMap, LayersControl } from "react-leaflet"
-import type { LatLngTuple } from "leaflet"
+import { divIcon, type LatLngTuple } from "leaflet"
 
 import { BaseCard } from "@/components/cards/base"
 import type { DashboardCardSize } from "@/components/cards/base/config"
 import { useLocationContext } from "@/hooks/use-location"
+
 
 type WeatherMapCardProps = {
   size?: DashboardCardSize
@@ -20,6 +21,13 @@ function SyncMapView({ position }: { position: LatLngTuple }) {
 
   return null
 }
+
+const customIcon = divIcon({
+  html: `<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>`,
+  className: "",
+  iconSize: [12, 12],
+  iconAnchor: [6, 6],
+})
 
 export function WeatherMapCard({ size = "lg" }: WeatherMapCardProps) {
   const { location } = useLocationContext()
@@ -76,7 +84,7 @@ export function WeatherMapCard({ size = "lg" }: WeatherMapCardProps) {
           </LayersControl.BaseLayer>
         </LayersControl>
 
-        <Marker position={position}>
+        <Marker position={position} icon={customIcon}>
           <Popup>
             {location ? `${location.name}, ${location.country}` : "Default location"}
           </Popup>
