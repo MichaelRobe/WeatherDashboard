@@ -1,0 +1,10 @@
+services:
+  weather-dashboard:
+    container_name: weather-dashboard
+    build:
+      context: .
+      args:
+        VITE_OPEN_WEATHER_MAP_API_KEY: ${VITE_OPEN_WEATHER_MAP_API_KEY}
+    ports:
+      - "5173:80"
+    restart: unless-stopped

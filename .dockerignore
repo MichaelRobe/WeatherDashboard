@@ -1,0 +1,42 @@
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.).
+#
+# For more help, visit the .dockerignore file reference guide at
+# https://docs.docker.com/go/build-context-dockerignore/
+
+# Node modules
+node_modules
+
+# Build output
+dist
+
+# Test artifacts
+coverage
+playwright-report
+test-results
+blob-report
+playwright/.cache
+playwright/.auth
+tests
+
+# Local env files
+.env
+.env.*
+
+# Version control and editor metadata
+.git
+.github
+.vscode
+.idea
+
+# Local config and docs not needed for the image build
+.gitignore
+.prettierignore
+.prettierrc
+README.md
+README.Docker.md
+*.log
+.DS_Store
+
+# Docker files not needed inside the image
+docker-compose.yml
