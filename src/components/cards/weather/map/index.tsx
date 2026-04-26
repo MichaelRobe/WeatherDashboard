@@ -38,7 +38,7 @@ export function WeatherMapCard({ size = "lg" }: WeatherMapCardProps) {
   return (
     <BaseCard size={size} empty={!location} className="p-0">
       <MapContainer
-        className="h-full w-full"
+        className="z-10 h-full w-full"
         center={position}
         zoom={5}
         dragging={false}
