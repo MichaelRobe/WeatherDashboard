@@ -73,6 +73,7 @@ export function Location() {
             }}
           >
             <ComboboxInput
+              aria-label="Search city"
               placeholder={isSuggestionsLoading ? "Loading cities..." : "Search city"}
               showClear
             />
@@ -93,7 +94,7 @@ export function Location() {
               </ComboboxList>
             </ComboboxContent>
           </Combobox>
-          <Button variant="outline" onClick={handleSearchClick}>
+          <Button aria-label="Search location" variant="outline" onClick={handleSearchClick}>
             <IconMapPin />
           </Button>
         </ButtonGroup>
